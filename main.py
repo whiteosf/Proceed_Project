@@ -1,5 +1,6 @@
 
 import PyPDF2
+import os
 
 class Patient:
     def __init__(self, name, mrn, dob, underlying_conditions, procedure_name, procedure_location):
@@ -12,11 +13,11 @@ class Patient:
 
 def extract_patient_info(pdf_file):
     patient_info = []
-    pdf = PyPDF2.PdfFileReader(open(pdf_file, 'rb'))
+    pdf = PyPDF2.PdfReader(open(pdf_file, 'rb'))
     
-    for page_num in range(pdf.getNumPages()):
-        page = pdf.getPage(page_num)
-        page_text = page.extractText()
+    for page_num in range(len(pdf.pages)):
+        page = pdf.pages[page_num]
+        page_text = page.extract_text()
         
         # Example: Assuming the text contains labels for patient information
         labels = {
@@ -55,7 +56,7 @@ def display_patient_info(patient_info):
         print()
 
 if __name__ == "__main__":
-    pdf_file = "Sample-filled-in-MR.pdf"  # Replace with the path to your PDF file
+    pdf_file = "Surgical_Notes.pdf"  # Replace with the path to your PDF file
     patient_info = extract_patient_info(pdf_file)
     
     if patient_info:
